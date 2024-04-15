@@ -58,8 +58,9 @@ let companions = [
     },]
 
 app.get('/', (request, resopnse) => {
-    let result = "GET ALL: /companions<br>GET BY ID: /companions/id"
-    resopnse.send(JSON.stringify(result))
+    let result = "List of Requests:<br>GET ALL: /companions<br>GET BY ID: /companions/id<br>DELETE: /companions/:id <br><br>Requests with body:<br>POST: /companions<br>PUT: /companions/:id" +
+    "<br><br>Body Example:<br>{ <br>''name'': '' '' <br>''class'': '' ''<br>''id'': int<br>}"
+    resopnse.send(result)
 })
 //GET
 app.get('/companions', (request, response) => {
