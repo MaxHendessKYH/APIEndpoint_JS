@@ -59,7 +59,7 @@ let companions = [
 
 app.get('/', (request, resopnse) => {
     let result = "List of Requests:<br>GET ALL: /companions<br>GET BY ID: /companions/id<br>DELETE: /companions/:id <br><br>Requests with body:<br>POST: /companions<br>PUT: /companions/:id" +
-    "<br><br>Body Example:<br>{ <br>''name'': '' '' <br>''class'': '' ''<br>''id'': int<br>}"
+    "<br><br>Body Example:<br>{ <br>''name'': '' '' <br>''class'': '' ''}"
     resopnse.send(result)
 })
 //GET
@@ -79,7 +79,11 @@ app.get('/companions/:id', (request, response) => {
 })
 // Post
 app.post('/companions', (request, response) => {
-    const newCompanion = request.body
+    const newCompanion = {
+        "name": request.body.name,
+        "class": request.body.class,
+        "id": companions.length + 1
+    }
 
     companions.push(newCompanion)
     response.status(201).send("Companion added successfully")
