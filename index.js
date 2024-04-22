@@ -5,9 +5,70 @@ const URL = '127.0.0.1'
 const PORT = 8000
 
 const server = app.listen(PORT, URL, () => {
-    console.log("https://" + server.address().address)
+    console.log("https://" + server.address().address + ":8000")
     console.log(server.address().port)
 })
+let notes = [
+    {
+    "filename": "",
+    "text": "hello world",
+    "id": 0
+}
+]
+// Noted crud
+app.post('/notes', (request, response) => {
+    const newNote = {
+        "filename": request.body.filename,
+        "text": request.body.filetext,
+        "id": notes.length + 1
+    }
+
+    notes.push(newNote)
+    response.status(201).send("Note added successfully")
+})
+app.get('/notes', (request, response) => {
+    response.send(notes)
+})
+
+app.get('/notes/:id', (request, response) => {
+    const id = request.params.id;
+    const note = notes.find(note => note.id == id);
+
+    if (note) {
+        response.send(note);
+    } else {
+        response.status(404).send("Note not found");
+    }
+})
+
+app.put('/notes/:id', (request, response) => {
+    const id = request.params.id
+    const updatedNote = request.body
+    updatedNote.id = id
+
+    const index = notes.findIndex(note => note.id == id)
+
+    if (index !== -1) {
+        notes[index] = updatedNote;
+        response.send("Note updated successfully")
+    } else {
+        response.status(404).send("Note not found")
+    }
+})
+app.delete('/notes/:id', (request , response) => {
+    const id = request.params.id
+    const index = notes.findIndex(note => note.id == id)
+    if (index !== -1) {
+        notes.splice(index, 1);
+        response.send("Note deleted successfully");
+    } else {
+        response.status(404).send("Note not found");
+    }
+    })
+
+
+
+
 
 let companions = [
 
@@ -58,8 +119,8 @@ let companions = [
     },]
 
 app.get('/', (request, resopnse) => {
-    let result = "List of Requests:<br>GET ALL: /companions<br>GET BY ID: /companions/id<br>DELETE: /companions/:id <br><br>Requests with body:<br>POST: /companions<br>PUT: /companions/:id" +
-    "<br><br>Body Example:<br>{ <br>''name'': '' '' <br>''class'': '' ''}"
+    let result = "List of Requests:<br>GET ALL: /notes<br>GET BY ID: /notes/id<br>DELETE: /notes/:id <br><br>Requests with body:<br>POST: /notes<br>PUT: /notes/:id" +
+    "<br><br>Body Example:<br>{ <br>''filenamename'': '' '' <br>''filetext'': '' ''<br>}"
     resopnse.send(result)
 })
 //GET
